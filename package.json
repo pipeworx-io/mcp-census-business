@@ -1,0 +1,33 @@
+{
+  "name": "@pipeworx/mcp-census-business",
+  "version": "0.1.0",
+  "description": "Census business statistics -- how big is an industry, by NAICS code and geography (fleet #4608).",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./tools.json": "./tools.json",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "mcp-census-business": "bin/cli.js"
+  },
+  "files": ["bin/", "lib/", "tools.json", "server.json"],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["mcp", "mcp-server", "model-context-protocol", "pipeworx", "census-business"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pipeworx-io/mcp-census-business.git"
+  },
+  "mcpName": "io.github.pipeworx-io/census-business",
+  "pipeworx": {
+    "mode": "gateway",
+    "slug": "census-business",
+    "gatewaySlug": "census-business",
+    "sourceHash": "v1-cbf8edc6981a53124c3cfc1de12eea38411a0b1d8c76311826b46e4540009240",
+    "sourceCommit": "06cab3af0fa5a65a398f12db1e5f09892c0d0c25"
+  }
+}

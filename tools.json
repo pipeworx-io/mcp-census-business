@@ -1,0 +1,222 @@
+[
+  {
+    "name": "industry_code_search",
+    "description": "Find the NAICS industry code Census statistics use for plain industry words (\"dental offices\", \"software publishers\", \"breweries\"), straight from the Census Bureau's own industry list for its business datasets. Returns up to 15 matching codes with titles. Use it before industry_size when the exact code matters. For the full NAICS hierarchy, descriptions and edition crosswalks use the naics pack.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Industry words, e.g. \"dental offices\"."
+        },
+        "_apiKey": {
+          "type": "string",
+          "description": "Census API key. Supplied by the platform; callers do not pass it."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "industry_size",
+    "description": "How big is an industry, by NAICS code (or plain words) and geography: number of employer establishments, employees and annual payroll from Census County Business Patterns (latest year published), plus the count and receipts of nonemployer businesses (sole proprietors with no payroll) from Census Nonemployer Statistics. Nation, state or county; or rank every state (breakdown \"state\") or every county in a state. Answers \"how many dental offices are there in Texas and what is their total payroll\". Payroll and receipts are returned in dollars. U.S. Census Bureau; each response names the dataset, year and any noise or suppression flag.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "industry": {
+          "type": "string",
+          "description": "NAICS code (\"621210\", \"54\", \"31-33\") or plain industry words (\"dental offices\"). Words resolve to the best-matching industry in the dataset and the response lists the alternatives it did not pick."
+        },
+        "state": {
+          "type": "string",
+          "description": "U.S. state name, postal abbreviation or FIPS code (e.g. \"Texas\", \"TX\", \"48\"). Omit for the nation."
+        },
+        "county": {
+          "type": "string",
+          "description": "3-digit county FIPS (needs state) or the 5-digit state+county FIPS, e.g. \"48201\" for Harris County, Texas."
+        },
+        "year": {
+          "type": "integer",
+          "description": "County Business Patterns reference year (default: the latest published, 2023)."
+        },
+        "breakdown": {
+          "type": "string",
+          "enum": [
+            "state",
+            "county"
+          ],
+          "description": "Return one row per state (ranked by establishments), or per county of the given state."
+        },
+        "include_nonemployer": {
+          "type": "boolean",
+          "description": "Also fetch nonemployer businesses (default true)."
+        },
+        "limit": {
+          "type": "integer",
+          "description": "Max rows for a breakdown (default 15, max 100)."
+        },
+        "_apiKey": {
+          "type": "string",
+          "description": "Census API key. Supplied by the platform; callers do not pass it."
+        }
+      },
+      "required": [
+        "industry"
+      ]
+    }
+  },
+  {
+    "name": "establishment_size_split",
+    "description": "How an industry splits by establishment size: establishments, employees and annual payroll for each employment-size class (1-4, 5-9, 10-19, 20-49, 50-99 ... 1,000+ employees) from Census County Business Patterns, for the nation, a state or a county. Answers \"what share of dental offices have fewer than 10 employees\". This counts establishments (locations), not firms: the firm-size tables (Statistics of U.S. Businesses) are not offered through the Census data service. U.S. Census Bureau.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "industry": {
+          "type": "string",
+          "description": "NAICS code (\"621210\", \"54\", \"31-33\") or plain industry words (\"dental offices\"). Words resolve to the best-matching industry in the dataset and the response lists the alternatives it did not pick."
+        },
+        "state": {
+          "type": "string",
+          "description": "U.S. state name, postal abbreviation or FIPS code (e.g. \"Texas\", \"TX\", \"48\"). Omit for the nation."
+        },
+        "county": {
+          "type": "string",
+          "description": "3-digit county FIPS (needs state) or the 5-digit state+county FIPS, e.g. \"48201\" for Harris County, Texas."
+        },
+        "year": {
+          "type": "integer",
+          "description": "Reference year (default: latest, 2023)."
+        },
+        "_apiKey": {
+          "type": "string",
+          "description": "Census API key. Supplied by the platform; callers do not pass it."
+        }
+      },
+      "required": [
+        "industry"
+      ]
+    }
+  },
+  {
+    "name": "economic_census_industry",
+    "description": "Industry receipts and structure from the Economic Census (every five years: 2022 default, 2017): number of establishments and firms, sales / value of shipments / revenue, annual payroll and employees by NAICS industry, for the nation, a state or a county. Use it for total industry revenue; County Business Patterns (industry_size) has no receipts. U.S. Census Bureau.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "industry": {
+          "type": "string",
+          "description": "NAICS code (\"621210\", \"54\", \"31-33\") or plain industry words (\"dental offices\"). Words resolve to the best-matching industry in the dataset and the response lists the alternatives it did not pick."
+        },
+        "state": {
+          "type": "string",
+          "description": "U.S. state name, postal abbreviation or FIPS code (e.g. \"Texas\", \"TX\", \"48\"). Omit for the nation."
+        },
+        "county": {
+          "type": "string",
+          "description": "3-digit county FIPS (needs state) or the 5-digit state+county FIPS, e.g. \"48201\" for Harris County, Texas."
+        },
+        "year": {
+          "type": "integer",
+          "enum": [
+            2022,
+            2017
+          ],
+          "description": "Economic Census year (default 2022)."
+        },
+        "_apiKey": {
+          "type": "string",
+          "description": "Census API key. Supplied by the platform; callers do not pass it."
+        }
+      },
+      "required": [
+        "industry"
+      ]
+    }
+  },
+  {
+    "name": "business_owner_demographics",
+    "description": "Who owns the employer firms in an industry: number of firms, receipts, employees and payroll split by owner sex, ethnicity, race or veteran status, from the Census Annual Business Survey. Nation or state, all industries or one. Answers \"how many women-owned employer firms are in construction in Ohio\". U.S. Census Bureau.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "industry": {
+          "type": "string",
+          "description": "NAICS code or words; omit for all sectors combined."
+        },
+        "dimension": {
+          "type": "string",
+          "enum": [
+            "sex",
+            "ethnicity",
+            "race",
+            "veteran"
+          ],
+          "description": "Owner characteristic to split by (default \"sex\")."
+        },
+        "state": {
+          "type": "string",
+          "description": "U.S. state name, postal abbreviation or FIPS code (e.g. \"Texas\", \"TX\", \"48\"). Omit for the nation."
+        },
+        "year": {
+          "type": "integer",
+          "description": "Survey year (default: latest published, 2023)."
+        },
+        "_apiKey": {
+          "type": "string",
+          "description": "Census API key. Supplied by the platform; callers do not pass it."
+        }
+      }
+    }
+  },
+  {
+    "name": "monthly_sales_series",
+    "description": "Monthly or quarterly industry sales series from the Census Bureau economic indicators: Monthly Retail Trade Survey (program \"mrts\": retail and food services sales, default category 44X72 total) and Quarterly Services Survey (program \"qss\"). Returns the time series with seasonal adjustment and error flag. Pass list_codes true to see which category and data-type codes a program publishes before asking for a series. U.S. Census Bureau.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "program": {
+          "type": "string",
+          "enum": [
+            "mrts",
+            "qss"
+          ],
+          "description": "mrts = Monthly Retail Trade, qss = Quarterly Services Survey (default mrts)."
+        },
+        "category_code": {
+          "type": "string",
+          "description": "Industry category code the program publishes (mrts default \"44X72\", retail and food services total)."
+        },
+        "data_type_code": {
+          "type": "string",
+          "description": "Measure code (mrts default \"SM\", sales). Use list_codes to see the program's codes."
+        },
+        "seasonally_adj": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no"
+          ],
+          "description": "Seasonally adjusted (default \"yes\")."
+        },
+        "from": {
+          "type": "string",
+          "description": "First period, \"YYYY\" or \"YYYY-MM\" (default: two years back)."
+        },
+        "to": {
+          "type": "string",
+          "description": "Last period, \"YYYY\" or \"YYYY-MM\" (default: latest)."
+        },
+        "list_codes": {
+          "type": "boolean",
+          "description": "List the category and data-type codes instead of a series."
+        },
+        "_apiKey": {
+          "type": "string",
+          "description": "Census API key. Supplied by the platform; callers do not pass it."
+        }
+      }
+    }
+  }
+]
